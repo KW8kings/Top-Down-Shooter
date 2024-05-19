@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s, color 0.5s;
+        }
+        h1 {
+            text-align: left;
+            margin-left: 30px;
+            line-height: 40px;
+        }
+        h5 {
+            text-align: left;
+            margin-left: 50px;
+            margin-right: 67%;
+            font-size: 15.5px;
+        }
+        body.dark-mode {
+            background-color: black;
+            color: white;
+        }
+        #toggleDarkMode {
+            margin-top: auto;
+            margin-left: 30px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            cursor: pointer;
+            border: 10px;
+            border-radius: 10px;
+            align-self: flex-start;
+        }
+        #right-content {
+        }
+        #right-content img {
+            width: 60%; 
+            height: 100%; 
+            position: fixed; 
+            top: 0; 
+            right: 0; 
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+            image-resolution: 4k;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 12px;
+            margin: 5px;
+            cursor: pointer;
+            border: 10px;
+            border-radius: 10px;
+            background-color: skyblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="og-image"></div>
+    <a href="Top-Down Shooter.htm"><button>Return Back To The Game   <-- </button></a>
+    <button id="toggleDarkMode">Toggle Light/Dark mode</button>
+    <h1>Controls:</h1>
+    <h5>W or Upward Arrow: the character moves a step forward.</h5>
+    <h5>S or Downward Arrow: the character moves backstep or to its original position.</h5>
+    <h5>D or Right Arrow: the character moves to the right side.</h5>
+    <h5>A or Left Arrow: the character moves to the left side.</h5>
+    <h5>R: enables the character to shift to the other side.</h5>
+    <h5>Clicking The Left Mouse: enables the character to fire his weapon or gun.</h5>
+    <h1>About:</h1>
+    <h5>Welcome to our 2D shooter game where you'll face non-stop zombie action! Arm yourself, take aim, and survive as long as you can against relentless waves of the undead. Set high scores, and see if you have what it takes to be the ultimate zombie slayer!</h5>
+    <h1>Contact:</h1>
+    <h5>Please if you have any comments or suggestions I would love to hear it. If you want to reach me out here:</h5>
+    <h5>Instagram: khalidalyarubi15_ (highly recommended, replying fast)</h5>
+    <h5>Phone number: +968 91239205 (recommended)</h5>
+    <h5>Email: khalid.alyarubi1908@gmail.com (recommended)</h5>
+    <h5>Discord: khalid#2470 (not recommended, replying but slow)</h5>
+    <h1>Updates:</h1>
+    <h5>Version 0.1 (latest)</h5>
+    <h5>Recent: none</h5>
+    <h5>Predictions: Sound effect may be added, different zombies from performance and health and lastly auto firing may be added.
+    <div id="right-content">
+        <img id="storyImage" src="https://images6.alphacoders.com/129/thumb-1920-1293302.jpg">
+    </div>
+    <script>
+        var imageList = [
+            "https://c4.wallpaperflare.com/wallpaper/500/198/463/pixel-art-digital-art-pixelated-pixels-wallpaper-preview.jpg",
+            "https://www.pixground.com/wp-content/uploads/2023/09/Sunny-Day-Pixel-Art-AI-Generated-4K-Wallpaper.jpg",
+            "https://img.freepik.com/premium-photo/japan-national-symbol-sightseeing-mount-fuji-representative-landmark-beautiful-mountain_917506-205676.jpg?w=360",
+            "https://wallpapercrafter.com/desktop1/500547-fantasy-art-night-fan-art-artwork-cityscape-cyberpunk.jpg",
+            "https://i.etsystatic.com/41465127/r/il/10c8a9/4807685781/il_570xN.4807685781_4li2.jpg",
+            "https://w0.peakpx.com/wallpaper/188/358/HD-wallpaper-artistic-pixel-art.jpg",
+            "https://e1.pxfuel.com/desktop-wallpaper/648/572/desktop-wallpaper-tokyo-pixel-art-8-bit-japan-live.jpg",
+            "https://images.wallpapersden.com/image/download/landscape-pixel-art_bGhnaGeUmZqaraWkpJRmbmdlrWZlbWU.jpg",
+            "https://images3.alphacoders.com/126/1265738.png",
+            "https://images6.alphacoders.com/129/thumb-1920-1293302.jpg",
+        ];
+        var currentIndex = 0;
+
+        function preloadImage(url) {
+            var img = new Image();
+            img.src = url;
+        }
+
+        imageList.forEach(preloadImage);
+
+        setInterval(function() {
+            var imageElement = document.getElementById('storyImage');
+            imageElement.style.opacity = 0;
+            setTimeout(function() {
+                currentIndex = (currentIndex + 1) % imageList.length;
+                imageElement.src = imageList[currentIndex];
+                imageElement.style.opacity = 1;
+            }, 1000);
+        }, 3500);
+
+        const body = document.body;
+        const toggleButton = document.getElementById('toggleDarkMode');
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-Down Shooter</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s, color 0.5s;
+        }
+        h1 {
+            margin: 20px;
+        }
+        h2 {
+            text-align: center;
+        }
+        .game-container {
+            position: relative;
+            width: 500px; 
+            height: 100%;
+            border: 2px solid #000;
+            background-color: #66A481;
+            overflow: hidden;
+        }
+        .player {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            width: 80px;
+            height: 80px;
+            background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c899442e-c949-43a9-928d-2441ebbec9cc/dcki0mj-893aba60-0b79-46a0-930f-524efadf0b55.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2M4OTk0NDJlLWM5NDktNDNhOS05MjhkLTI0NDFlYmJlYzljY1wvZGNraTBtai04OTNhYmE2MC0wYjc5LTQ2YTAtOTMwZi01MjRlZmFkZjBiNTUuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Wl6YL-3BBNGk63pVsknSoHmas8u1QRm3dmiQEmUNNC4');
+            background-size: cover;
+            transform: translateX(-50%);
+            transition: transform 0.3s;
+        } 
+        .player.flipped {
+            transform: translateX(-50%) scaleX(-1);
+        }
+        .bullet {
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            background-color: red;
+        }
+        .enemy {
+            position: absolute;
+            width: 50px;
+            height: 60px;
+            background-image: url('https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ed7e8b85-42b2-4fed-972b-c016a37f5bde/dd34am0-6e3ea26e-c987-4ea8-a169-a42065d1d473.gif?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2VkN2U4Yjg1LTQyYjItNGZlZC05NzJiLWMwMTZhMzdmNWJkZVwvZGQzNGFtMC02ZTNlYTI2ZS1jOTg3LTRlYTgtYTE2OS1hNDIwNjVkMWQ0NzMuZ2lmIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.5KI_tZMpSkiH84ZmkQWS-I4qs4-J_4mGXL6iIe_XBmU');
+            background-size: cover;
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+        .game-over-message {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .try-again-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: 10px;
+            border-radius: 10px;
+            background-color: skyblue;
+        }
+        body.dark-mode {
+            background-color: black;
+            color: white;
+        }
+        #toggleDarkMode {
+            margin-top: auto;
+            margin-left: 30px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: green;
+            color: white;
+            cursor: pointer;
+            border: 10px;
+            border-radius: 10px;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top-Down Shooter</h1>
+    <div class="game-container" id="gameContainer">
+        <div class="player" id="player"></div>
+        <div id="gameOver">
+            <h2>Game Over!</h2>
+            <div class="controls">
+                <button id="tryAgainButton">Try Again</button>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <button id="startButton">Start</button>
+        <button id="pauseButton">Pause</button>
+        <button id="score">Score: 0</button>
+        <a href="Top-Down Shooter Informations.htm"><button>Learn More About | Controls</button></a>
+        <button id="toggleDarkMode">Toggle Light/Dark mode</button>
+    </div>
+    <script>
+        const body = document.body;
+        const toggleButton = document.getElementById('toggleDarkMode');
+        toggleButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+        const gameContainer = document.getElementById('gameContainer');
+        const player = document.getElementById('player');
+        const scoreElement = document.getElementById('score');
+        const gameOverElement = document.getElementById('gameOver');
+        const tryAgainButton = document.getElementById('tryAgainButton');
+        let bullets = [];
+        let enemies = [];
+        let gameRunning = false;
+        let gamePaused = false;
+        let animationFrameId;
+        let enemyIntervalId;
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        let playerDirection = 1;
+        function movePlayer(event) {
+    const step = 30;
+    const rect = gameContainer.getBoundingClientRect();
+    const key = event.key.toLowerCase();
+    if ((key === 'a' || key === 'arrowleft') && player.offsetLeft > 0) {
+        player.style.left = player.offsetLeft - step + 'px';
+    }
+    if ((key === 'd' || key === 'arrowright') && player.offsetLeft < rect.width - player.clientWidth) {
+        player.style.left = player.offsetLeft + step + 'px';
+    }
+    if (key === 'w' || key === 'arrowup') {
+        const bottomLimit = 20;
+        const playerBottom = rect.bottom - player.getBoundingClientRect().bottom;
+        if (playerBottom <= bottomLimit) {
+            player.style.bottom = parseInt(player.style.bottom) + step + 'px';
+        }
+    }
+    if (key === 's' || key === 'arrowdown') {
+        player.style.bottom = '10px';
+    }
+    if (key === 'r') {
+        player.classList.toggle('flipped');
+        playerDirection = player.classList.contains('flipped') ? -1 : 1;
+    }
+}
+function shoot(event) {
+    if (event.button === 0) {
+        const playerRect = player.getBoundingClientRect();
+        const gameContainerRect = gameContainer.getBoundingClientRect();
+        const bullet = document.createElement('div');
+        bullet.className = 'bullet';
+        bullet.style.left = (playerRect.left - gameContainerRect.left) + (player.offsetWidth / 2 - 2.5) + 'px'; 
+        bullet.style.bottom = (gameContainerRect.bottom - playerRect.top) + 'px'; 
+        bullet.direction = playerDirection; 
+        gameContainer.appendChild(bullet);
+        bullets.push(bullet);
+    }
+}
+        function createEnemy() {
+            if (gameRunning && !gamePaused) {
+                const enemy = document.createElement('div');
+                enemy.className = 'enemy';
+                enemy.style.left = Math.random() * (gameContainer.clientWidth - 50) + 'px';
+                enemy.style.top = '0px';
+                gameContainer.appendChild(enemy);
+                enemies.push(enemy);
+            }
+        }
+        function moveBullets() {
+    bullets.forEach((bullet, index) => {
+        bullet.style.bottom = parseInt(bullet.style.bottom) + 5 + 'px';
+        if (parseInt(bullet.style.bottom) > gameContainer.clientHeight || parseInt(bullet.style.bottom) < 0) {
+            bullet.remove();
+            bullets.splice(index, 1);
+        }
+    });
+}
+        function moveEnemies() {
+            enemies.forEach((enemy, index) => {
+                enemy.style.top = parseInt(enemy.style.top) + 2 + 'px';
+                if (parseInt(enemy.style.top) > gameContainer.clientHeight) {
+                    endGame();
+                    return;
+                }
+                const enemyRect = enemy.getBoundingClientRect();
+                const playerRect = player.getBoundingClientRect();
+                if (isColliding(enemyRect, playerRect)) {
+                    endGame();
+                    return;
+                }
+            });
+        }
+        function isColliding(rect1, rect2) {
+            return !(
+                rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom
+            );
+        }
+        function checkCollisions() {
+            bullets.forEach((bullet, bulletIndex) => {
+                enemies.forEach((enemy, enemyIndex) => {
+                    const bulletRect = bullet.getBoundingClientRect();
+                    const enemyRect = enemy.getBoundingClientRect();
+
+                    if (
+                        bulletRect.left < enemyRect.left + enemyRect.width &&
+                        bulletRect.left + bulletRect.width > enemyRect.left &&
+                        bulletRect.top < enemyRect.top + enemyRect.height &&
+                        bulletRect.height + bulletRect.top > enemyRect.top
+                    ) {
+                        bullet.remove();
+                        enemy.remove();
+                        bullets.splice(bulletIndex, 1);
+                        enemies.splice(enemyIndex, 1);
+                        score++;
+                        scoreElement.textContent = `Score: ${score}`;
+                        localStorage.setItem('score', score);
+                    }
+                });
+            });
+        }
+        function gameLoop() {
+            if (!gamePaused) {
+                moveBullets();
+                moveEnemies();
+                checkCollisions();
+            }
+            if (gameRunning) {
+                animationFrameId = requestAnimationFrame(gameLoop);
+            }
+        }
+        function startGame() {
+            if (!gameRunning) {
+                gameRunning = true;
+                gamePaused = false;
+                gameOverElement.style.display = 'none';
+                animationFrameId = requestAnimationFrame(gameLoop);
+                enemyIntervalId = setInterval(createEnemy, 2000);
+            }
+        }
+        function endGame() {
+            gameRunning = false;
+            clearInterval(enemyIntervalId);
+            cancelAnimationFrame(animationFrameId);
+            gameOverElement.style.display = 'block';
+        }
+        function pauseGame() {
+            gamePaused = !gamePaused;
+            if (!gamePaused) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        function tryAgain() {
+            gameOverElement.style.display = 'none';
+            enemies.forEach(enemy => enemy.remove());
+            enemies = [];
+            bullets.forEach(bullet => bullet.remove());
+            bullets = [];
+            startGame();
+        }
+        document.addEventListener('keydown', movePlayer);
+        document.addEventListener('mousedown', shoot);
+        document.getElementById('startButton').addEventListener('click', startGame);
+        document.getElementById('pauseButton').addEventListener('click', pauseGame);
+        tryAgainButton.addEventListener('click', tryAgain);
+        scoreElement.textContent = `Score: ${score}`;
+    </script>
+</body>
+</html>
